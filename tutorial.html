@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Tutorial HTML CSS JavaScript - UVOcode</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #f1f1f1;
+    }
+    header {
+      background-color: #282c34;
+      color: white;
+      padding: 15px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 60px;
+      z-index: 99;
+    }
+    .ads-top {
+      background-color: #fff;
+      padding: 5px;
+      text-align: center;
+    }
+    .logo {
+      font-weight: bold;
+      font-size: 20px;
+    }
+    .search-container input {
+      padding: 7px;
+      border: none;
+      border-radius: 5px;
+      width: 200px;
+    }
+    .container {
+      max-width: 1000px;
+      margin: auto;
+      padding: 20px;
+      background-color: white;
+    }
+    h1, h2, h3 {
+      color: #333;
+    }
+    code {
+      background: #eee;
+      padding: 2px 5px;
+      border-radius: 3px;
+    }
+    pre {
+      background-color: #f0f0f0;
+      padding: 10px;
+      overflow-x: auto;
+    }
+    footer {
+      background-color: #282c34;
+      color: white;
+      text-align: center;
+      padding: 15px;
+      margin-top: 30px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- IKLAN -->
+  <div class="ads-top">
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3303675784689911"
+        crossorigin="anonymous"></script>
+    <ins class="adsbygoogle"
+        style="display:block"
+        data-ad-client="ca-pub-3303675784689911"
+        data-ad-slot="2770167369"
+        data-ad-format="auto"
+        data-full-width-responsive="true"></ins>
+    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+  </div>
+
+  <!-- NAVBAR -->
+  <header>
+    <div class="logo">UVOcode</div>
+    <div class="search-container">
+      <input type="text" id="search" placeholder="Cari simbol atau istilah..." onkeyup="searchText()" />
+    </div>
+  </header>
+
+  <!-- KONTEN -->
+  <div class="container" id="content">
+    <h1>Pengertian, Penjelasan, dan Contoh HTML, CSS, dan JavaScript</h1>
+
+    <h2>Pengertian</h2>
+    <ul>
+      <li><strong>HTML</strong>: Bahasa markup untuk membuat struktur halaman web.</li>
+      <li><strong>CSS</strong>: Bahasa stylesheet untuk mempercantik halaman web.</li>
+      <li><strong>JavaScript</strong>: Bahasa pemrograman agar web jadi interaktif.</li>
+    </ul>
+
+    <h2>Penjelasan dan Contoh</h2>
+    <h3>HTML</h3>
+    <p>Membuat struktur web seperti paragraf, tombol, gambar, dsb.</p>
+    <pre><code>&lt;p&gt;Hello World!&lt;/p&gt;</code></pre>
+
+    <h3>CSS</h3>
+    <p>Mengatur tampilan seperti warna, font, ukuran, dll.</p>
+    <pre><code>body {
+  background-color: #f2f2f2;
+  font-family: Arial;
+}</code></pre>
+
+    <h3>JavaScript</h3>
+    <p>Membuat website bisa berinteraksi dengan pengguna.</p>
+    <pre><code>document.getElementById("btn").addEventListener("click", function() {
+  alert("Hello!");
+});</code></pre>
+
+    <h2>Simbol-Simbol Dasar Coding</h2>
+    <ul>
+      <li><code>&lt;</code> : Kurang dari, pembuka tag HTML</li>
+      <li><code>&gt;</code> : Lebih dari, penutup tag HTML</li>
+      <li><code>/</code> : Garis miring (penutup tag atau direktori)</li>
+      <li><code>'</code> / <code>"</code> : Tanda kutip string</li>
+      <li><code>\\</code> : Escape character</li>
+      <li><code>|</code> : Logika OR</li>
+      <li><code>:</code> : Pisah properti dan nilai di CSS</li>
+      <li><code>( )</code> : Untuk fungsi</li>
+      <li><code>_</code> : Pengganti spasi</li>
+      <li><code>+</code>, <code>-</code>, <code>=</code> : Operasi</li>
+    </ul>
+
+    <h2>Simbol Lainnya</h2>
+    <ul>
+      <li><code>#</code> : ID selector CSS</li>
+      <li><code>.</code> : Class selector CSS</li>
+      <li><code>[ ]</code> : Atribut selector CSS</li>
+      <li><code>{ }</code> : Blok kode</li>
+      <li><code>;</code> : Mengakhiri perintah JavaScript</li>
+    </ul>
+
+    <h2>Simbol dalam HTML & CSS</h2>
+    <ul>
+      <li><code>&amp;</code> : Karakter khusus HTML</li>
+      <li><code>&nbsp;</code> : Spasi tetap HTML</li>
+      <li><code>*</code> : Universal selector CSS</li>
+      <li><code>~</code> : Sibling selector CSS</li>
+      <li><code>&gt;</code> : Child selector CSS</li>
+    </ul>
+
+    <p><strong>Semoga penjelasan ini membantu kamu memahami dasar web development!</strong></p>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <div>
+      <strong>Logo</strong><br>
+      © 2025 uvoCODE - All rights reserved.<br>
+      <em>ADITdeveloper</em>
+    </div>
+  </footer>
+
+  <script>
+    function searchText() {
+      const input = document.getElementById("search").value.toLowerCase();
+      const content = document.getElementById("content");
+      const items = content.querySelectorAll("h1, h2, h3, p, li, code, pre");
+      items.forEach(el => {
+        el.style.backgroundColor = "";
+        if (el.textContent.toLowerCase().includes(input) && input !== "") {
+          el.style.backgroundColor = "yellow";
+        }
+      });
+    }
+  </script>
+</body>
+</html>
