@@ -4,38 +4,36 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>uvoCODE</title>
-
-  <!-- Font Calleo (gunakan alternatif mirip, seperti Calligraffitti dari Google Fonts) -->
-  <link href="https://fonts.googleapis.com/css2?family=Calligraffitti&display=swap" rel="stylesheet">
-
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.34.1/min/vs/loader.min.js"></script>
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3303675784689911" crossorigin="anonymous"></script>
 
+  <!-- Font Tagesschrift fallback -->
   <style>
+    @font-face {
+      font-family: 'Tagesschrift';
+      src: url('https://fonts.cdnfonts.com/s/12030/Tagesschrift.woff') format('woff');
+    }
+
     body {
       margin: 0;
       font-family: Arial, sans-serif;
       background-color: #1f1f1f;
       color: #f0f0f0;
-      height: 100vh;
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
     }
 
     header {
       background-color: #2b2b2b;
-      padding: 1rem;
+      padding: 0.7rem 1rem;
       display: flex;
       align-items: center;
       justify-content: space-between;
+      flex-wrap: wrap;
     }
 
     .logo {
-      font-size: 1.5rem;
-      font-family: 'Calligraffitti', cursive;
-      font-weight: normal;
+      font-size: 1.2rem;
+      font-weight: bold;
+      font-family: 'Tagesschrift', sans-serif;
     }
 
     .controls {
@@ -54,23 +52,38 @@
     }
 
     .editor-container {
-      flex: 1;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      grid-template-rows: 1fr;
-      gap: 2px;
-      min-height: 0;
+      display: flex;
+      height: calc(100vh - 260px);
+      overflow: hidden;
     }
 
-    #code, #output {
-      width: 100%;
+    .resizer {
+      width: 5px;
+      background: #444;
+      cursor: ew-resize;
+    }
+
+    #editor {
+      width: 50%;
+      min-width: 200px;
+      resize: horizontal;
+      overflow: auto;
+    }
+
+    #code {
       height: 100%;
-      min-height: 0;
     }
 
-    iframe {
+    #output {
+      flex: 1;
       border: none;
       background-color: white;
+    }
+
+    .ads-container {
+      background-color: #2a2a2a;
+      text-align: center;
+      padding: 5px;
     }
 
     footer {
@@ -88,103 +101,158 @@
       height: 20px;
     }
 
-    .ads-container {
-      background-color: #2a2a2a;
-      padding: 10px;
-      text-align: center;
+    .left-tools {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .left-tools a {
+      color: white;
+      background: #444;
+      padding: 6px 10px;
+      border-radius: 5px;
+      text-decoration: none;
+      font-size: 0.9rem;
     }
 
     @media (max-width: 768px) {
       .editor-container {
-        grid-template-columns: 1fr;
-        grid-template-rows: 1fr 1fr;
+        flex-direction: column;
+      }
+      .resizer {
+        width: 100%;
+        height: 5px;
+        cursor: ns-resize;
+      }
+      #editor {
+        width: 100%;
+        height: 50%;
+        resize: vertical;
       }
     }
   </style>
 </head>
 <body>
-  <header>
-    <div class="logo">UVOcode - ADITdev</div>
-    <div class="controls">
-      <button onclick="setLayout('row')" title="Potrait"><i class="fas fa-arrows-alt-v"></i></button>
-      <button onclick="setLayout('column')" title="Landscape"><i class="fas fa-arrows-alt-h"></i></button>
-      <button onclick="runCode()">▶ Jalankan</button>
-      <button onclick="downloadCode()">⬇ Download</button>
-    </div>
-  </header>
 
-  <div id="editor-container" class="editor-container">
+<!-- Iklan atas -->
+<div class="ads-container">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3303675784689911"
+    crossorigin="anonymous"></script>
+  <ins class="adsbygoogle"
+    style="display:block"
+    data-ad-client="ca-pub-3303675784689911"
+    data-ad-slot="2770167369"
+    data-ad-format="auto"
+    data-full-width-responsive="true"></ins>
+  <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+</div>
+
+<header>
+  <div class="left-tools">
+    <a href="tutorial.html">📘 Tutorial</a>
+    <button onclick="setLayout('row')" title="Potrait"><i class="fas fa-arrows-alt-v"></i></button>
+    <button onclick="setLayout('column')" title="Landscape"><i class="fas fa-arrows-alt-h"></i></button>
+  </div>
+  <div class="logo">UVOcode - ADITdev</div>
+  <div class="controls">
+    <button onclick="runCode()">▶ Jalankan</button>
+    <button onclick="downloadCode()">⬇ Download</button>
+  </div>
+</header>
+
+<div id="editor-container" class="editor-container">
+  <div id="editor">
     <div id="code"></div>
-    <iframe id="output"></iframe>
   </div>
+  <div class="resizer" id="resizer"></div>
+  <iframe id="output"></iframe>
+</div>
 
-  <div class="ads-container">
-    <ins class="adsbygoogle"
-         style="display:block"
-         data-ad-client="ca-pub-3303675784689911"
-         data-ad-slot="2770167369"
-         data-ad-format="auto"
-         data-full-width-responsive="true"></ins>
-    <script>
-      (adsbygoogle = window.adsbygoogle || []).push({});
-    </script>
-  </div>
+<!-- Iklan bawah -->
+<div class="ads-container">
+  <ins class="adsbygoogle"
+    style="display:block"
+    data-ad-client="ca-pub-3303675784689911"
+    data-ad-slot="2770167369"
+    data-ad-format="auto"
+    data-full-width-responsive="true"></ins>
+  <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+</div>
 
-  <footer>
-    <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjUE7LesOTqq1Fh8jzi8BFXz314fWtzjUT0tEQGhQQKA9v7zyg3zpFOd3c34O6NmzKJSXFUntQURIralFe3XtGDxJ6GdJFuUH3Xp0M768_4XvG-AV43tUrbsdVMGxz7lqkbj63r30FeYColmR5yg0FpeO6UqZ4EScg7tPIiBuZC5DsQlPmy2a_MspUurqSC/s16000/ADITdeveloper.png" alt="Logo"/>
-    <span>&copy; 2025 uvoCODE - All rights reserved.</span>ADITdeveloper
-  </footer>
+<footer>
+  <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjUE7LesOTqq1Fh8jzi8BFXz314fWtzjUT0tEQGhQQKA9v7zyg3zpFOd3c34O6NmzKJSXFUntQURIralFe3XtGDxJ6GdJFuUH3Xp0M768_4XvG-AV43tUrbsdVMGxz7lqkbj63r30FeYColmR5yg0FpeO6UqZ4EScg7tPIiBuZC5DsQlPmy2a_MspUurqSC/s16000/ADITdeveloper.png" alt="Logo" />
+  <span>&copy; 2025 uvoCODE - All rights reserved.</span>ADITdeveloper
+</footer>
 
-  <script>
-    require.config({ paths: { 'vs': 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.34.1/min/vs' } });
-    require(["vs/editor/editor.main"], function () {
-      window.editor = monaco.editor.create(document.getElementById('code'), {
-        value: `<!DOCTYPE html>
+<script>
+  require.config({ paths: { 'vs': 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.34.1/min/vs' }});
+  require(["vs/editor/editor.main"], function () {
+    window.editor = monaco.editor.create(document.getElementById('code'), {
+      value: `<!DOCTYPE html>
 <html>
 <head>
 <title>Page Title</title>
 </head>
 <body>
-  <h1>Hello world</h1>
-  <p>buat web anda - uvo code.</p>
+<h1>Hello world</h1>
+<p>buat web anda - uvo code.</p>
 </body>
 </html>`,
-        language: 'html',
-        theme: 'vs-dark',
-        fontSize: 14,
-        automaticLayout: true,
-        minimap: { enabled: false } // ✅ Menghilangkan tulisan kecil/minimap di kanan atas
-      });
+      language: 'html',
+      theme: 'vs-dark',
+      fontSize: 14,
+      automaticLayout: true
     });
+  });
 
-    function runCode() {
-      const code = window.editor.getValue();
-      const iframe = document.getElementById("output");
-      iframe.srcdoc = code;
-    }
+  function runCode() {
+    const code = window.editor.getValue();
+    const iframe = document.getElementById("output");
+    iframe.srcdoc = code;
+  }
 
-    function downloadCode() {
-      const code = window.editor.getValue();
-      const filename = prompt("Nama file:", "uvoCODE.html");
-      if (filename) {
-        const blob = new Blob([code], { type: "text/html" });
-        const link = document.createElement("a");
-        link.href = URL.createObjectURL(blob);
-        link.download = filename;
-        link.click();
-      }
+  function downloadCode() {
+    const code = window.editor.getValue();
+    const filename = prompt("Nama file:", "uvoCODE.html");
+    if (filename) {
+      const blob = new Blob([code], { type: "text/html" });
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.download = filename;
+      link.click();
     }
+  }
 
-    function setLayout(mode) {
-      const container = document.getElementById("editor-container");
-      if (mode === 'row') {
-        container.style.gridTemplateColumns = '1fr';
-        container.style.gridTemplateRows = '1fr 1fr';
-      } else {
-        container.style.gridTemplateColumns = '1fr 1fr';
-        container.style.gridTemplateRows = '1fr';
-      }
+  function setLayout(mode) {
+    const container = document.getElementById("editor-container");
+    if (mode === 'row') {
+      container.style.flexDirection = 'column';
+      document.getElementById("editor").style.height = '50%';
+      document.getElementById("editor").style.width = '100%';
+    } else {
+      container.style.flexDirection = 'row';
+      document.getElementById("editor").style.height = '100%';
+      document.getElementById("editor").style.width = '50%';
     }
-  </script>
+  }
+
+  // Resizable grid
+  const resizer = document.getElementById('resizer');
+  const editorDiv = document.getElementById('editor');
+  const output = document.getElementById('output');
+
+  resizer.addEventListener('mousedown', function (e) {
+    e.preventDefault();
+    document.onmousemove = function (e) {
+      const offsetRight = document.body.offsetWidth - (e.clientX);
+      const editorWidth = e.clientX;
+      editorDiv.style.width = editorWidth + 'px';
+    };
+    document.onmouseup = function () {
+      document.onmousemove = null;
+    };
+  });
+</script>
 </body>
 </html>
