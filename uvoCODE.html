@@ -1,0 +1,1057 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Tutorial HTML CSS JavaScript Lengkap - UVOcode</title>
+
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3303675784689911"
+          crossorigin="anonymous"></script>
+
+  <style>
+    /* CSS Reset Sederhana & Global */
+    :root {
+      --primary-color: #282c34; /* Warna header/footer */
+      --secondary-color: #0c7a9c; /* Warna aksen untuk link, tombol "Coba Sendiri" */
+      --background-color: #f8f9fa; /* Latar belakang body utama */
+      --content-bg-color: #ffffff; /* Latar belakang area konten */
+      --text-color: #212529; /* Warna teks utama */
+      --code-bg-color: #e9ecef; /* Latar belakang blok kode */
+      --border-color: #dee2e6; /* Warna border */
+      --sidebar-width: 260px;
+      --header-height: 60px; /* Tinggi header utama */
+      --ads-top-height: 60px; /* Perkiraan tinggi kontainer iklan atas */
+    }
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      line-height: 1.6;
+      background-color: var(--background-color);
+      color: var(--text-color);
+      padding-top: var(--ads-top-height); /* Ruang untuk iklan atas */
+    }
+
+    /* Kontainer Iklan Atas */
+    .ads-top-container {
+      background-color: #fff; /* Warna latar standar jika iklan tidak dimuat */
+      min-height: var(--ads-top-height); /* Minimal tinggi untuk menjaga layout */
+      padding: 5px 0;
+      text-align: center;
+      border-bottom: 1px solid var(--border-color);
+      position: fixed; /* Tetap di atas */
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 1000; /* Di atas segalanya */
+    }
+
+    /* Header Utama Situs */
+    .site-header {
+      background-color: var(--primary-color);
+      color: white;
+      padding: 0 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      height: var(--header-height);
+      position: sticky; /* Header akan menempel setelah melewati ads-top-container */
+      top: var(--ads-top-height); /* Menempel di bawah ads-top-container */
+      z-index: 999; /* Di bawah ads-top, tapi di atas konten lain */
+      width: 100%;
+    }
+
+    .site-header .logo {
+      font-weight: bold;
+      font-size: 1.5rem; /* Ukuran font logo diperbesar */
+      text-decoration: none;
+      color: white;
+    }
+
+    /* Navigasi Utama di Header (Contoh) */
+    .main-nav a {
+      color: white;
+      text-decoration: none;
+      margin-left: 15px;
+      padding: 5px 10px;
+      border-radius: 4px;
+      transition: background-color 0.3s ease;
+    }
+    .main-nav a:hover, .main-nav a.active {
+      background-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .search-container input[type="text"] {
+      padding: 8px 12px; /* Padding input diperbesar */
+      border: 1px solid #555; /* Border lebih terlihat */
+      border-radius: 5px;
+      width: 250px; /* Lebar input disesuaikan */
+      background-color: #f1f1f1;
+      color: var(--text-color);
+    }
+    .search-container input[type="text"]::placeholder {
+      color: #6c757d;
+    }
+
+    /* Tombol Toggle Sidebar untuk Mobile */
+    .sidebar-toggle {
+      display: none; /* Sembunyikan di desktop */
+      background: none;
+      border: none;
+      color: white;
+      font-size: 1.8rem;
+      cursor: pointer;
+    }
+
+    /* Wrapper Utama (Sidebar + Konten) */
+    .main-wrapper {
+      display: flex;
+      margin-top: var(--header-height); /* Ruang untuk header yang sticky */
+    }
+
+    /* Sidebar Navigasi */
+    .sidebar {
+      width: var(--sidebar-width);
+      background-color: #e9ecef; /* Warna latar sidebar sedikit berbeda */
+      padding: 20px;
+      height: calc(100vh - var(--ads-top-height) - var(--header-height)); /* Tinggi penuh dikurangi header & ads */
+      overflow-y: auto; /* Scroll jika konten sidebar panjang */
+      position: fixed; /* Sidebar tetap */
+      top: calc(var(--ads-top-height) + var(--header-height));
+      left: 0;
+      border-right: 1px solid var(--border-color);
+    }
+
+    .sidebar h3 {
+      color: var(--primary-color);
+      font-size: 1.1rem;
+      margin-top: 20px;
+      margin-bottom: 10px;
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 5px;
+    }
+    .sidebar h3:first-child {
+      margin-top: 0;
+    }
+
+    .sidebar ul {
+      list-style: none;
+      padding-left: 0;
+    }
+
+    .sidebar ul li a {
+      display: block;
+      padding: 8px 10px; /* Padding link sidebar */
+      text-decoration: none;
+      color: var(--text-color);
+      border-radius: 4px;
+      transition: background-color 0.2s ease, color 0.2s ease; /* Transisi lebih halus */
+    }
+
+    .sidebar ul li a:hover,
+    .sidebar ul li a.active { /* Kelas active untuk link yang sedang aktif */
+      background-color: var(--secondary-color);
+      color: white;
+    }
+
+    /* Area Konten Utama */
+    .content-area {
+      flex-grow: 1; /* Mengambil sisa ruang */
+      padding: 30px; /* Padding lebih besar */
+      margin-left: var(--sidebar-width); /* Ruang untuk sidebar */
+      background-color: var(--content-bg-color);
+      min-height: calc(100vh - var(--ads-top-height) - var(--header-height)); /* Minimal tinggi konten */
+    }
+
+    .content-area section {
+      margin-bottom: 40px; /* Jarak antar section */
+      padding-top: 20px; /* Jarak untuk anchor link dari header sticky */
+      scroll-margin-top: calc(var(--header-height) + var(--ads-top-height) + 20px); /* Offset untuk scrolling ke ID */
+    }
+
+    /* Styling Judul Konten */
+    .content-area h1 {
+      font-size: 2.2rem; /* Ukuran H1 lebih besar */
+      color: var(--primary-color);
+      margin-bottom: 25px;
+      border-bottom: 2px solid var(--secondary-color);
+      padding-bottom: 10px;
+    }
+
+    .content-area h2 {
+      font-size: 1.8rem; /* Ukuran H2 lebih besar */
+      color: var(--primary-color);
+      margin-top: 30px;
+      margin-bottom: 20px;
+      border-left: 4px solid var(--secondary-color);
+      padding-left: 10px;
+    }
+
+    .content-area h3 {
+      font-size: 1.5rem; /* Ukuran H3 lebih besar */
+      color: #333;
+      margin-top: 25px;
+      margin-bottom: 15px;
+    }
+    
+    .content-area h4 {
+      font-size: 1.2rem;
+      color: #444;
+      margin-top: 20px;
+      margin-bottom: 10px;
+    }
+
+    .content-area p, .content-area ul, .content-area ol, .content-area dl {
+      margin-bottom: 15px;
+      font-size: 1rem; /* Ukuran font paragraf standar */
+    }
+    .content-area ul, .content-area ol {
+      padding-left: 20px; /* Indentasi list */
+    }
+    
+    /* Styling untuk blok kode & inline code */
+    code.inline-code { /* Untuk kode inline seperti `<div>` */
+      background-color: #f0e6f8; /* Warna ungu muda untuk inline code */
+      color: #5e35b1;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 0.9em;
+    }
+
+    pre {
+      background-color: var(--code-bg-color);
+      border: 1px solid var(--border-color);
+      padding: 15px; /* Padding lebih besar */
+      overflow-x: auto; /* Scroll horizontal jika kode panjang */
+      border-radius: 5px;
+      margin-bottom: 20px; /* Jarak bawah */
+      font-size: 0.95em; /* Ukuran font kode */
+    }
+
+    pre code { /* Tidak perlu styling khusus jika pre sudah diatur */
+      font-family: 'Consolas', 'Monaco', 'Courier New', Courier, monospace;
+      color: #333; /* Warna teks kode */
+      background: none; /* Hapus background default dari `code` di dalam `pre` */
+      padding: 0;
+      border-radius: 0;
+    }
+    
+    /* Contoh class untuk syntax highlighting sederhana (bisa dikembangkan) */
+    pre code .html-tag { color: #d73a49; } /* Merah untuk tag */
+    pre code .html-attr-name { color: #6f42c1; } /* Ungu untuk nama atribut */
+    pre code .html-attr-value { color: #005cc5; } /* Biru untuk nilai atribut */
+    pre code .html-comment { color: #6a737d; } /* Abu-abu untuk komentar */
+
+    pre code .css-selector { color: #6f42c1; } /* Ungu untuk selector */
+    pre code .css-property { color: #005cc5; } /* Biru untuk properti */
+    pre code .css-value { color: #22863a; } /* Hijau untuk nilai */
+    pre code .css-comment { color: #6a737d; } /* Abu-abu untuk komentar */
+
+    pre code .js-keyword { color: #d73a49; } /* Merah untuk keyword */
+    pre code .js-function { color: #6f42c1; } /* Ungu untuk fungsi */
+    pre code .js-string { color: #032f62; } /* Biru tua untuk string */
+    pre code .js-comment { color: #6a737d; } /* Abu-abu untuk komentar */
+    pre code .js-number { color: #005cc5; } /* Biru untuk angka */
+
+    /* Kotak Contoh & Tombol "Coba Sendiri" */
+    .example-box {
+      border: 1px solid var(--border-color);
+      border-radius: 5px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    }
+    .example-header {
+      background-color: #f7f7f7;
+      padding: 10px 15px;
+      border-bottom: 1px solid var(--border-color);
+      font-weight: bold;
+    }
+    .example-content {
+      padding: 15px;
+    }
+    .try-it-button {
+      display: inline-block;
+      margin-top: 10px;
+      padding: 8px 15px;
+      background-color: var(--secondary-color);
+      color: white;
+      text-decoration: none;
+      border-radius: 4px;
+      font-weight: bold;
+      transition: background-color 0.3s ease;
+    }
+    .try-it-button:hover {
+      background-color: #0a6482; /* Warna hover sedikit lebih gelap */
+    }
+    .try-it-button::after {
+      content: " \bb"; /* Panah kanan */
+      font-weight: bold;
+    }
+
+    /* Styling untuk Daftar Definisi (untuk simbol) */
+    dl dt {
+      font-weight: bold;
+      font-family: 'Courier New', Courier, monospace;
+      color: var(--secondary-color);
+      font-size: 1.1em;
+    }
+    dl dd {
+      margin-left: 20px;
+      margin-bottom: 10px;
+    }
+
+    /* Footer */
+    .site-footer {
+      background-color: var(--primary-color);
+      color: white;
+      text-align: center;
+      padding: 25px 20px; /* Padding footer diperbesar */
+      margin-top: 30px; /* Jarak dari konten */
+      font-size: 0.9em;
+    }
+    .site-footer strong {
+      display: block;
+      font-size: 1.2em;
+      margin-bottom: 5px;
+    }
+    .site-footer em {
+      display: block;
+      margin-top: 5px;
+      font-style: normal;
+      color: #ccc;
+    }
+
+    /* Highlight untuk hasil pencarian */
+    .highlight {
+      background-color: yellow !important; /* Paksa warna kuning untuk highlight */
+      color: black !important;
+      padding: 1px 2px;
+      border-radius: 2px;
+    }
+
+    /* Responsif Desain */
+    @media (max-width: 992px) { /* Tablet dan di bawahnya */
+      .sidebar {
+        position: fixed;
+        left: -100%; /* Sembunyikan sidebar di luar layar */
+        top: calc(var(--ads-top-height) + var(--header-height));
+        z-index: 1001; /* Di atas header saat terbuka */
+        transition: left 0.3s ease-in-out;
+        box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+        background-color: #f8f9fa; /* Warna latar lebih terang agar kontras */
+      }
+      .sidebar.active {
+        left: 0; /* Tampilkan sidebar */
+      }
+      .content-area {
+        margin-left: 0; /* Konten mengambil lebar penuh */
+      }
+      .sidebar-toggle {
+        display: block; /* Tampilkan tombol hamburger */
+      }
+      .main-nav { /* Sembunyikan nav utama di header, bisa diganti dengan menu dropdown jika perlu */
+        display: none; 
+      }
+      .search-container input[type="text"] {
+        width: 150px; /* Kecilkan search bar */
+      }
+    }
+
+    @media (max-width: 768px) { /* Mobile */
+      .site-header .logo {
+        font-size: 1.3rem;
+      }
+      .search-container {
+        /* Jika perlu, sembunyikan search bar atau buat ikon saja */
+      }
+      .content-area {
+        padding: 20px; /* Kurangi padding konten */
+      }
+      .content-area h1 { font-size: 1.8rem; }
+      .content-area h2 { font-size: 1.5rem; }
+      .content-area h3 { font-size: 1.3rem; }
+      pre { font-size: 0.85em; padding: 10px;}
+    }
+
+  </style>
+</head>
+<body>
+
+  <div class="ads-top-container">
+    <ins class="adsbygoogle"
+         style="display:block; min-height:var(--ads-top-height);" data-ad-client="ca-pub-3303675784689911"
+         data-ad-slot="2770167369"
+         data-ad-format="auto"
+         data-full-width-responsive="true"></ins>
+    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+  </div>
+
+  <header class="site-header">
+    <a href="#" class="logo">UVOcode</a>
+    <nav class="main-nav">
+      <a href="#html-section" class="active">HTML</a>
+      <a href="#css-section">CSS</a>
+      <a href="#js-section">JavaScript</a>
+      <a href="#simbol-section">Simbol</a>
+      </nav>
+    <div class="search-container">
+      <input type="text" id="searchInput" placeholder="Cari materi..." onkeyup="searchContent()" />
+    </div>
+    <button class="sidebar-toggle" onclick="toggleSidebar()">&#9776;</button> </header>
+
+  <div class="main-wrapper">
+    <aside class="sidebar" id="sidebarNav">
+      <nav>
+        <section id="nav-html">
+          <h3>HTML</h3>
+          <ul>
+            <li><a href="#html-pengenalan" onclick="closeSidebar()">Pengenalan</a></li>
+            <li><a href="#html-struktur-dasar" onclick="closeSidebar()">Struktur Dasar</a></li>
+            <li><a href="#html-elemen" onclick="closeSidebar()">Elemen Umum</a></li>
+            <li><a href="#html-atribut" onclick="closeSidebar()">Atribut</a></li>
+            <li><a href="#html-heading-paragraf" onclick="closeSidebar()">Heading & Paragraf</a></li>
+            <li><a href="#html-link-gambar" onclick="closeSidebar()">Link & Gambar</a></li>
+            <li><a href="#html-list" onclick="closeSidebar()">List (Daftar)</a></li>
+            <li><a href="#html-tabel" onclick="closeSidebar()">Tabel</a></li>
+            <li><a href="#html-form" onclick="closeSidebar()">Formulir</a></li>
+            <li><a href="#html-semantik" onclick="closeSidebar()">Elemen Semantik</a></li>
+          </ul>
+        </section>
+        <section id="nav-css">
+          <h3>CSS</h3>
+          <ul>
+            <li><a href="#css-pengenalan" onclick="closeSidebar()">Pengenalan</a></li>
+            <li><a href="#css-sintaks-selector" onclick="closeSidebar()">Sintaks & Selector</a></li>
+            <li><a href="#css-cara-menambahkan" onclick="closeSidebar()">Cara Menambahkan CSS</a></li>
+            <li><a href="#css-warna-background" onclick="closeSidebar()">Warna & Background</a></li>
+            <li><a href="#css-box-model" onclick="closeSidebar()">Box Model</a></li>
+            <li><a href="#css-text-font" onclick="closeSidebar()">Teks & Font</a></li>
+            <li><a href="#css-display-position" onclick="closeSidebar()">Display & Position</a></li>
+            <li><a href="#css-flexbox" onclick="closeSidebar()">Flexbox</a></li>
+            <li><a href="#css-grid" onclick="closeSidebar()">Grid</a></li>
+            <li><a href="#css-responsif" onclick="closeSidebar()">Desain Responsif</a></li>
+          </ul>
+        </section>
+        <section id="nav-js">
+          <h3>JavaScript</h3>
+          <ul>
+            <li><a href="#js-pengenalan" onclick="closeSidebar()">Pengenalan</a></li>
+            <li><a href="#js-sintaks-dasar" onclick="closeSidebar()">Sintaks Dasar</a></li>
+            <li><a href="#js-variabel-tipe-data" onclick="closeSidebar()">Variabel & Tipe Data</a></li>
+            <li><a href="#js-operator" onclick="closeSidebar()">Operator</a></li>
+            <li><a href="#js-fungsi" onclick="closeSidebar()">Fungsi</a></li>
+            <li><a href="#js-kondisional" onclick="closeSidebar()">Kondisional (If/Else)</a></li>
+            <li><a href="#js-looping" onclick="closeSidebar()">Looping (Perulangan)</a></li>
+            <li><a href="#js-dom" onclick="closeSidebar()">Manipulasi DOM</a></li>
+            <li><a href="#js-event" onclick="closeSidebar()">Event Handling</a></li>
+          </ul>
+        </section>
+        <section id="nav-simbol">
+          <h3>Simbol Coding</h3>
+          <ul>
+            <li><a href="#simbol-dasar" onclick="closeSidebar()">Simbol Dasar</a></li>
+            <li><a href="#simbol-css-lanjutan" onclick="closeSidebar()">Simbol CSS Lanjutan</a></li>
+            <li><a href="#simbol-html-entitas" onclick="closeSidebar()">Entitas HTML</a></li>
+          </ul>
+        </section>
+      </nav>
+    </aside>
+
+    <main class="content-area" id="mainContent">
+      <section id="html-section">
+        <h1>Pengenalan Komprehensif HTML</h1>
+        
+        <article id="html-pengenalan">
+          <h2>Apa itu HTML?</h2>
+          <p>HTML adalah singkatan dari <strong>HyperText Markup Language</strong>. Ini bukanlah bahasa pemrograman dalam artian memiliki logika komputasi, melainkan sebuah <strong>bahasa markup</strong>. Tugas utama HTML adalah memberikan struktur dan makna pada konten di halaman web. Bayangkan HTML sebagai kerangka atau fondasi sebuah rumah; ia menentukan di mana letak pintu, jendela, ruangan, dan elemen struktural lainnya.</p>
+          <p>Dengan HTML, Anda mendefinisikan berbagai elemen seperti judul, paragraf, gambar, tautan (link), tabel, formulir, dan banyak lagi. Browser web kemudian membaca file HTML ini dan merender (menampilkan) kontennya kepada pengguna sesuai dengan markup yang telah didefinisikan.</p>
+          <h4>Fitur Utama HTML:</h4>
+          <ul>
+            <li><strong>Struktur Dokumen:</strong> Mendefinisikan hierarki dan tata letak konten.</li>
+            <li><strong>Hyperlink:</strong> Memungkinkan navigasi antar halaman web atau bagian dalam halaman yang sama.</li>
+            <li><strong>Multimedia:</strong> Mendukung penyematan gambar, audio, dan video.</li>
+            <li><strong>Formulir:</strong> Memfasilitasi interaksi pengguna melalui input data.</li>
+            <li><strong>Semantik:</strong> Memberikan makna pada konten (misalnya, <code class="inline-code">&lt;article&gt;</code>, <code class="inline-code">&lt;nav&gt;</code>, <code class="inline-code">&lt;footer&gt;</code>), yang penting untuk SEO dan aksesibilitas.</li>
+          </ul>
+        </article>
+
+        <article id="html-struktur-dasar">
+          <h2>Struktur Dasar Dokumen HTML</h2>
+          <p>Setiap dokumen HTML mengikuti struktur dasar tertentu yang harus dipatuhi agar valid dan dapat diinterpretasikan dengan benar oleh browser.</p>
+          <div class="example-box">
+            <div class="example-header">Contoh: Struktur Dasar HTML5</div>
+            <div class="example-content">
+              <pre><code class="language-html"><span class="html-comment">&lt;!DOCTYPE html&gt;</span>
+&lt;<span class="html-tag">html</span> <span class="html-attr-name">lang</span>=<span class="html-attr-value">"id"</span>&gt;
+  &lt;<span class="html-tag">head</span>&gt;
+    &lt;<span class="html-tag">meta</span> <span class="html-attr-name">charset</span>=<span class="html-attr-value">"UTF-8"</span> /&gt;
+    &lt;<span class="html-tag">meta</span> <span class="html-attr-name">name</span>=<span class="html-attr-value">"viewport"</span> <span class="html-attr-name">content</span>=<span class="html-attr-value">"width=device-width, initial-scale=1.0"</span> /&gt;
+    &lt;<span class="html-tag">title</span>&gt;Judul Halaman Saya&lt;/<span class="html-tag">title</span>&gt;
+    &lt;!-- CSS, Font, atau script lain bisa ditambahkan di sini --&gt;
+  &lt;/<span class="html-tag">head</span>&gt;
+  &lt;<span class="html-tag">body</span>&gt;
+    &lt;!-- Konten yang terlihat oleh pengguna ada di sini --&gt;
+    &lt;<span class="html-tag">h1</span>&gt;Halo Dunia!&lt;/<span class="html-tag">h1</span>&gt;
+    &lt;<span class="html-tag">p</span>&gt;Ini adalah paragraf pertama saya.&lt;/<span class="html-tag">p</span>&gt;
+  &lt;/<span class="html-tag">body</span>&gt;
+&lt;/<span class="html-tag">html</span>&gt;</code></pre>
+              <a href="#" class="try-it-button" onclick="alert('Fitur Coba Sendiri belum aktif untuk contoh ini.')">Coba Sendiri</a>
+            </div>
+          </div>
+          <h4>Penjelasan Elemen Struktur Dasar:</h4>
+          <ul>
+            <li><code class="inline-code">&lt;!DOCTYPE html&gt;</code>: Deklarasi ini mendefinisikan bahwa dokumen ini adalah HTML5. Ini adalah informasi penting untuk browser agar merender halaman dalam mode standar.</li>
+            <li><code class="inline-code">&lt;html lang="id"&gt;</code>: Elemen root (akar) dari setiap halaman HTML. Atribut <code class="inline-code">lang="id"</code> menandakan bahwa bahasa utama konten adalah Bahasa Indonesia.</li>
+            <li><code class="inline-code">&lt;head&gt;</code>: Berisi meta-informasi tentang dokumen HTML yang tidak ditampilkan secara langsung di halaman. Ini termasuk judul halaman (title), set karakter, link ke file CSS, script, dan metadata lainnya.
+              <ul>
+                <li><code class="inline-code">&lt;meta charset="UTF-8"&gt;</code>: Menentukan set karakter yang digunakan, UTF-8 adalah standar yang paling umum dan mendukung berbagai macam karakter.</li>
+                <li><code class="inline-code">&lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;</code>: Mengkonfigurasi viewport agar halaman web responsif terhadap berbagai ukuran layar perangkat.</li>
+                <li><code class="inline-code">&lt;title&gt;Judul Halaman Saya&lt;/title&gt;</code>: Menentukan judul halaman yang akan muncul di tab browser atau judul jendela.</li>
+              </ul>
+            </li>
+            <li><code class="inline-code">&lt;body&gt;</code>: Berisi semua konten yang akan ditampilkan kepada pengguna, seperti teks, gambar, tautan, tabel, dll.</li>
+          </ul>
+        </article>
+
+        <article id="html-elemen">
+          <h2>Elemen HTML Umum</h2>
+          <p>Elemen HTML adalah blok bangunan halaman web. Sebuah elemen biasanya terdiri dari <strong>tag pembuka</strong>, <strong>konten</strong>, dan <strong>tag penutup</strong>. Contoh: <code class="inline-code">&lt;p&gt;Ini konten paragraf.&lt;/p&gt;</code>. Ada juga elemen kosong (empty elements) yang tidak memiliki tag penutup, seperti <code class="inline-code">&lt;img src="gambar.jpg" alt="deskripsi"&gt;</code> atau <code class="inline-code">&lt;br&gt;</code>.</p>
+          
+          <h4 id="html-heading-paragraf">Heading dan Paragraf</h4>
+          <p>Heading digunakan untuk menandai judul dan subjudul dalam konten. HTML menyediakan enam level heading, dari <code class="inline-code">&lt;h1&gt;</code> (paling penting) hingga <code class="inline-code">&lt;h6&gt;</code> (kurang penting). Paragraf (<code class="inline-code">&lt;p&gt;</code>) digunakan untuk teks biasa.</p>
+          <div class="example-box">
+            <div class="example-header">Contoh: Heading dan Paragraf</div>
+            <div class="example-content">
+              <pre><code class="language-html">&lt;<span class="html-tag">h1</span>&gt;Judul Utama Halaman&lt;/<span class="html-tag">h1</span>&gt;
+&lt;<span class="html-tag">p</span>&gt;Ini adalah pengenalan singkat tentang topik utama.&lt;/<span class="html-tag">p</span>&gt;
+
+&lt;<span class="html-tag">h2</span>&gt;Sub Judul Pertama&lt;/<span class="html-tag">h2</span>&gt;
+&lt;<span class="html-tag">p</span>&gt;Paragraf ini menjelaskan lebih detail tentang sub judul pertama.&lt;/<span class="html-tag">p</span>&gt;
+
+&lt;<span class="html-tag">h3</span>&gt;Detail Lebih Lanjut&lt;/<span class="html-tag">h3</span>&gt;
+&lt;<span class="html-tag">p</span>&gt;Informasi spesifik di bawah sub judul.&lt;/<span class="html-tag">p</span>&gt;</code></pre>
+            </div>
+          </div>
+
+          <h4 id="html-link-gambar">Tautan (Links) dan Gambar (Images)</h4>
+          <p>Tautan (<code class="inline-code">&lt;a&gt;</code>) digunakan untuk menghubungkan ke halaman lain atau sumber daya. Atribut <code class="inline-code">href</code> menentukan URL tujuan. Gambar (<code class="inline-code">&lt;img&gt;</code>) digunakan untuk menyematkan gambar. Atribut <code class="inline-code">src</code> menentukan sumber gambar dan <code class="inline-code">alt</code> memberikan teks alternatif.</p>
+          <div class="example-box">
+            <div class="example-header">Contoh: Tautan dan Gambar</div>
+            <div class="example-content">
+              <pre><code class="language-html">&lt;!-- Tautan ke situs eksternal --&gt;
+&lt;<span class="html-tag">a</span> <span class="html-attr-name">href</span>=<span class="html-attr-value">"https://www.google.com"</span>&gt;Kunjungi Google&lt;/<span class="html-tag">a</span>&gt;
+
+&lt;!-- Tautan ke bagian lain di halaman ini (membutuhkan ID target) --&gt;
+&lt;<span class="html-tag">a</span> <span class="html-attr-name">href</span>=<span class="html-attr-value">"#css-pengenalan"</span>&gt;Pelajari CSS&lt;/<span class="html-tag">a</span>&gt;
+
+&lt;!-- Menyematkan gambar --&gt;
+&lt;<span class="html-tag">img</span> <span class="html-attr-name">src</span>=<span class="html-attr-value">"logo.png"</span> <span class="html-attr-name">alt</span>=<span class="html-attr-value">"Logo Perusahaan"</span> <span class="html-attr-name">width</span>=<span class="html-attr-value">"100"</span> <span class="html-attr-name">height</span>=<span class="html-attr-value">"50"</span> /&gt;</code></pre>
+            </div>
+          </div>
+          
+          <h4 id="html-list">List (Daftar)</h4>
+          <p>HTML menyediakan beberapa jenis list untuk menampilkan daftar item:</p>
+          <ul>
+              <li><strong>Unordered List (<code class="inline-code">&lt;ul&gt;</code>):</strong> Daftar item tanpa urutan tertentu, biasanya ditampilkan dengan bullet point. Setiap item didefinisikan dengan tag <code class="inline-code">&lt;li&gt;</code>.</li>
+              <li><strong>Ordered List (<code class="inline-code">&lt;ol&gt;</code>):</strong> Daftar item dengan urutan tertentu, biasanya ditampilkan dengan angka atau huruf. Setiap item juga didefinisikan dengan tag <code class="inline-code">&lt;li&gt;</code>.</li>
+              <li><strong>Description List (<code class="inline-code">&lt;dl&gt;</code>):</strong> Daftar istilah dan deskripsinya. Menggunakan tag <code class="inline-code">&lt;dt&gt;</code> untuk istilah dan <code class="inline-code">&lt;dd&gt;</code> untuk deskripsi.</li>
+          </ul>
+           <div class="example-box">
+            <div class="example-header">Contoh: Unordered dan Ordered List</div>
+            <div class="example-content">
+              <pre><code class="language-html">&lt;<span class="html-tag">h4</span>&gt;Daftar Buah Favorit (Unordered):&lt;/<span class="html-tag">h4</span>&gt;
+&lt;<span class="html-tag">ul</span>&gt;
+  &lt;<span class="html-tag">li</span>&gt;Mangga&lt;/<span class="html-tag">li</span>&gt;
+  &lt;<span class="html-tag">li</span>&gt;Apel&lt;/<span class="html-tag">li</span>&gt;
+  &lt;<span class="html-tag">li</span>&gt;Jeruk&lt;/<span class="html-tag">li</span>&gt;
+&lt;/<span class="html-tag">ul</span>&gt;
+
+&lt;<span class="html-tag">h4</span>&gt;Langkah-langkah Membuat Kopi (Ordered):&lt;/<span class="html-tag">h4</span>&gt;
+&lt;<span class="html-tag">ol</span>&gt;
+  &lt;<span class="html-tag">li</span>&gt;Siapkan cangkir dan kopi bubuk.&lt;/<span class="html-tag">li</span>&gt;
+  &lt;<span class="html-tag">li</span>&gt;Masukkan kopi ke cangkir.&lt;/<span class="html-tag">li</span>&gt;
+  &lt;<span class="html-tag">li</span>&gt;Tuang air panas.&lt;/<span class="html-tag">li</span>&gt;
+  &lt;<span class="html-tag">li</span>&gt;Aduk rata dan sajikan.&lt;/<span class="html-tag">li</span>&gt;
+&lt;/<span class="html-tag">ol</span>&gt;</code></pre>
+            </div>
+          </div>
+        </article>
+
+        <article id="html-atribut">
+          <h2>Atribut HTML</h2>
+          <p>Atribut memberikan informasi tambahan tentang elemen HTML. Atribut selalu ditempatkan di dalam tag pembuka dan biasanya datang dalam pasangan nama/nilai seperti: <code class="inline-code">nama="nilai"</code>.</p>
+          <h4>Contoh Atribut Umum:</h4>
+          <ul>
+            <li><code class="inline-code">id</code>: Menentukan ID unik untuk sebuah elemen (digunakan oleh CSS dan JavaScript).</li>
+            <li><code class="inline-code">class</code>: Menentukan satu atau lebih nama kelas untuk sebuah elemen (digunakan oleh CSS dan JavaScript).</li>
+            <li><code class="inline-code">style</code>: Digunakan untuk menerapkan styling CSS inline pada elemen.</li>
+            <li><code class="inline-code">href</code>: (pada <code class="inline-code">&lt;a&gt;</code>) Menentukan URL tujuan tautan.</li>
+            <li><code class="inline-code">src</code>: (pada <code class="inline-code">&lt;img&gt;</code>, <code class="inline-code">&lt;script&gt;</code>) Menentukan sumber file.</li>
+            <li><code class="inline-code">alt</code>: (pada <code class="inline-code">&lt;img&gt;</code>) Menyediakan teks alternatif untuk gambar jika tidak dapat ditampilkan.</li>
+            <li><code class="inline-code">disabled</code>: (pada elemen form) Menonaktifkan elemen input.</li>
+            <li><code class="inline-code">placeholder</code>: (pada elemen input) Memberikan petunjuk singkat di dalam field input.</li>
+          </ul>
+           <div class="example-box">
+            <div class="example-header">Contoh: Penggunaan Atribut</div>
+            <div class="example-content">
+              <pre><code class="language-html">&lt;<span class="html-tag">p</span> <span class="html-attr-name">id</span>=<span class="html-attr-value">"intro"</span> <span class="html-attr-name">class</span>=<span class="html-attr-value">"highlight-text main-paragraph"</span>&gt;Paragraf dengan ID dan Class.&lt;/<span class="html-tag">p</span>&gt;
+&lt;<span class="html-tag">img</span> <span class="html-attr-name">src</span>=<span class="html-attr-value">"logo.png"</span> <span class="html-attr-name">alt</span>=<span class="html-attr-value">"Logo UVOcode"</span> <span class="html-attr-name">style</span>=<span class="html-attr-value">"width:150px; border:1px solid black;"</span> /&gt;
+&lt;<span class="html-tag">input</span> <span class="html-attr-name">type</span>=<span class="html-attr-value">"text"</span> <span class="html-attr-name">placeholder</span>=<span class="html-attr-value">"Masukkan nama Anda"</span> <span class="html-attr-name">disabled</span> /&gt;</code></pre>
+            </div>
+          </div>
+        </article>
+        
+        </section>
+
+      <section id="css-section">
+        <h1>Pengenalan Komprehensif CSS</h1>
+        
+        <article id="css-pengenalan">
+          <h2>Apa itu CSS?</h2>
+          <p>CSS adalah singkatan dari <strong>Cascading Style Sheets</strong>. CSS adalah bahasa stylesheet yang digunakan untuk mendeskripsikan presentasi (tampilan dan format) dari dokumen yang ditulis dalam bahasa markup seperti HTML. CSS memisahkan konten (HTML) dari presentasi, yang membawa banyak keuntungan:</p>
+          <ul>
+            <li><strong>Pemeliharaan Lebih Mudah:</strong> Perubahan desain dapat dilakukan di satu file CSS dan akan berlaku untuk banyak halaman HTML.</li>
+            <li><strong>Konsistensi:</strong> Tampilan yang konsisten di seluruh situs web.</li>
+            <li><strong>Aksesibilitas:</strong> Memungkinkan pengguna untuk menyesuaikan tampilan sesuai kebutuhan mereka.</li>
+            <li><strong>Performa:</strong> Mengurangi duplikasi kode styling di setiap halaman HTML, sehingga ukuran file lebih kecil dan waktu muat lebih cepat.</li>
+          </ul>
+          <p>Dengan CSS, Anda dapat mengontrol warna, font, ukuran teks, spasi, layout (tata letak), background, border, dan banyak aspek visual lainnya dari elemen HTML.</p>
+        </article>
+
+        <article id="css-sintaks-selector">
+          <h2>Sintaks Dasar CSS dan Selector</h2>
+          <p>Aturan CSS terdiri dari dua bagian utama: <strong>selector</strong> dan <strong>blok deklarasi</strong>.</p>
+          <p><strong>Selector</strong> menunjuk ke elemen HTML yang ingin Anda gayai. <strong>Blok deklarasi</strong> berisi satu atau lebih deklarasi yang dipisahkan oleh titik koma (<code class="inline-code">;</code>). Setiap deklarasi terdiri dari <strong>properti CSS</strong> dan <strong>nilainya</strong>, dipisahkan oleh titik dua (<code class="inline-code">:</code>).</p>
+          <div class="example-box">
+            <div class="example-header">Contoh: Sintaks CSS</div>
+            <div class="example-content">
+              <pre><code class="language-css"><span class="css-comment">/* Ini adalah komentar CSS */</span>
+<span class="css-selector">p</span> { <span class="css-comment">/* 'p' adalah selector (menargetkan semua elemen &lt;p&gt;) */</span>
+  <span class="css-property">color</span>: <span class="css-value">blue</span>;         <span class="css-comment">/* Properti: color, Nilai: blue */</span>
+  <span class="css-property">font-size</span>: <span class="css-value">16px</span>;       <span class="css-comment">/* Properti: font-size, Nilai: 16px */</span>
+  <span class="css-property">line-height</span>: <span class="css-value">1.5</span>;
+}
+
+<span class="css-selector">.highlight</span> { <span class="css-comment">/* '.highlight' adalah class selector */</span>
+  <span class="css-property">background-color</span>: <span class="css-value">yellow</span>;
+  <span class="css-property">font-weight</span>: <span class="css-value">bold</span>;
+}
+
+<span class="css-selector">#header-utama</span> { <span class="css-comment">/* '#header-utama' adalah ID selector */</span>
+  <span class="css-property">padding</span>: <span class="css-value">20px</span>;
+  <span class="css-property">border-bottom</span>: <span class="css-value">1px solid #ccc</span>;
+}</code></pre>
+            </div>
+          </div>
+          <h4>Jenis-jenis Selector Umum:</h4>
+          <ul>
+            <li><strong>Selector Elemen/Tipe:</strong> Memilih elemen berdasarkan nama tagnya (misalnya, <code class="inline-code">h1</code>, <code class="inline-code">p</code>, <code class="inline-code">div</code>).</li>
+            <li><strong>Selector Class:</strong> Memilih elemen berdasarkan atribut <code class="inline-code">class</code>-nya (diawali dengan titik, misalnya, <code class="inline-code">.nama-kelas</code>). Satu elemen bisa memiliki banyak kelas, dan satu kelas bisa digunakan oleh banyak elemen.</li>
+            <li><strong>Selector ID:</strong> Memilih satu elemen unik berdasarkan atribut <code class="inline-code">id</code>-nya (diawali dengan tanda pagar, misalnya, <code class="inline-code">#id-unik</code>). ID harus unik dalam satu halaman.</li>
+            <li><strong>Selector Atribut:</strong> Memilih elemen berdasarkan atribut atau nilai atributnya (misalnya, <code class="inline-code">[type="text"]</code>).</li>
+            <li><strong>Selector Universal (<code class="inline-code">*</code>):</strong> Memilih semua elemen.</li>
+            <li><strong>Selector Kombinasi (Descendant, Child, Adjacent Sibling, General Sibling):</strong> Menggabungkan selector untuk menargetkan elemen berdasarkan hubungannya dengan elemen lain.</li>
+            <li><strong>Pseudo-class:</strong> Memilih elemen berdasarkan state tertentu (misalnya, <code class="inline-code">:hover</code>, <code class="inline-code">:first-child</code>).</li>
+            <li><strong>Pseudo-element:</strong> Memilih dan menggayai bagian tertentu dari elemen (misalnya, <code class="inline-code">::before</code>, <code class="inline-code">::first-line</code>).</li>
+          </ul>
+        </article>
+        
+        </section>
+
+      <section id="js-section">
+        <h1>Pengenalan Komprehensif JavaScript</h1>
+        
+        <article id="js-pengenalan">
+          <h2>Apa itu JavaScript?</h2>
+          <p>JavaScript (sering disingkat JS) adalah bahasa pemrograman tingkat tinggi, dinamis, dan seringkali diinterpretasikan yang paling dikenal sebagai bahasa skrip untuk halaman web. Namun, penggunaannya telah berkembang pesat dan kini juga digunakan di banyak lingkungan non-browser berkat Node.js.</p>
+          <p>Bersama HTML dan CSS, JavaScript adalah salah satu dari tiga teknologi inti World Wide Web:</p>
+          <ul>
+            <li><strong>HTML</strong> menyediakan struktur konten.</li>
+            <li><strong>CSS</strong> mengatur presentasi (tampilan) konten.</li>
+            <li><strong>JavaScript</strong> menambahkan interaktivitas dan perilaku dinamis pada halaman web.</li>
+          </ul>
+          <h4>Kemampuan Utama JavaScript di Browser:</h4>
+          <ul>
+            <li><strong>Manipulasi DOM (Document Object Model):</strong> Mengubah konten, struktur, dan gaya halaman HTML secara dinamis.</li>
+            <li><strong>Event Handling:</strong> Merespons aksi pengguna seperti klik mouse, input keyboard, atau perubahan halaman.</li>
+            <li><strong>Validasi Formulir:</strong> Memeriksa input pengguna sebelum dikirim ke server.</li>
+            <li><strong>Animasi:</strong> Membuat efek visual dan animasi.</li>
+            <li><strong>AJAX (Asynchronous JavaScript and XML):</strong> Memuat data dari server secara asynchronous tanpa perlu me-refresh seluruh halaman.</li>
+            <li><strong>Penyimpanan Sisi Klien:</strong> Menggunakan Web Storage (localStorage, sessionStorage) atau IndexedDB untuk menyimpan data di browser pengguna.</li>
+            <li>Dan masih banyak lagi, seperti bekerja dengan API browser, grafis (Canvas, WebGL), audio/video, dll.</li>
+          </ul>
+        </article>
+
+        <article id="js-sintaks-dasar">
+          <h2>Sintaks Dasar JavaScript</h2>
+          <p>JavaScript memiliki sintaks yang mirip dengan bahasa pemrograman lain seperti Java atau C++. Berikut beberapa aspek dasar:</p>
+          <ul>
+            <li><strong>Case-Sensitive:</strong> JavaScript membedakan huruf besar dan kecil (<code class="inline-code">variabel</code> dan <code class="inline-code">Variabel</code> dianggap berbeda).</li>
+            <li><strong>Statement (Pernyataan):</strong> Instruksi JavaScript biasanya diakhiri dengan titik koma (<code class="inline-code">;</code>), meskipun dalam banyak kasus bersifat opsional karena adanya Automatic Semicolon Insertion (ASI). Namun, praktik terbaik adalah selalu menggunakannya.</li>
+            <li><strong>Komentar:</strong>
+              <ul>
+                <li>Komentar satu baris diawali dengan <code class="inline-code">//</code>.</li>
+                <li>Komentar beberapa baris diawali dengan <code class="inline-code">/*</code> dan diakhiri dengan <code class="inline-code">*/</code>.</li>
+              </ul>
+            </li>
+            <li><strong>Blok Kode:</strong> Dikelompokkan dalam kurung kurawal <code class="inline-code">{ }</code>, misalnya dalam fungsi atau pernyataan kondisional.</li>
+          </ul>
+          <div class="example-box">
+            <div class="example-header">Contoh: Sintaks Dasar JavaScript</div>
+            <div class="example-content">
+              <pre><code class="language-javascript"><span class="js-comment">// Ini adalah komentar satu baris</span>
+<span class="js-keyword">let</span> message = <span class="js-string">"Halo UVOcode!"</span>; <span class="js-comment">// Deklarasi variabel dengan let</span>
+<span class="js-keyword">const</span> PI = <span class="js-number">3.14</span>;         <span class="js-comment">// Deklarasi konstanta</span>
+
+<span class="js-comment">/*
+  Ini adalah
+  komentar
+  multi-baris.
+*/</span>
+
+<span class="js-keyword">function</span> <span class="js-function">sapa</span>(nama) {
+  <span class="js-comment">// Ini adalah blok kode di dalam fungsi</span>
+  console.<span class="js-function">log</span>(<span class="js-string">"Halo, "</span> + nama + <span class="js-string">"!"</span>);
+  <span class="js-keyword">return</span> <span class="js-string">"Pesan terkirim"</span>;
+}
+
+<span class="js-function">sapa</span>(<span class="js-string">"Pengguna"</span>); <span class="js-comment">// Memanggil fungsi</span>
+
+<span class="js-keyword">if</span> (PI > <span class="js-number">3</span>) {
+  console.<span class="js-function">log</span>(<span class="js-string">"PI lebih besar dari 3"</span>);
+}</code></pre>
+              <a href="#" class="try-it-button" onclick="alert('Untuk mencoba kode JavaScript ini, buka konsol browser Anda (biasanya F12).')">Coba Sendiri (di Konsol)</a>
+            </div>
+          </div>
+        </article>
+        
+        </section>
+
+      <section id="simbol-section">
+        <h1>Daftar Simbol Umum dalam Coding</h1>
+        <p>Memahami simbol-simbol dasar adalah kunci untuk membaca dan menulis kode. Berikut adalah beberapa simbol yang sering ditemui dalam HTML, CSS, dan JavaScript, beserta penjelasannya.</p>
+
+        <article id="simbol-dasar">
+          <h2>Simbol Dasar dan Umum</h2>
+          <dl>
+            <dt>&lt; &gt;</dt>
+            <dd><strong>Kurung Siku (Angle Brackets)</strong>: Digunakan dalam HTML untuk mendefinisikan tag. Contoh: <code class="inline-code">&lt;p&gt;</code> (tag pembuka paragraf), <code class="inline-code">&lt;/p&gt;</code> (tag penutup paragraf).</dd>
+
+            <dt>/</dt>
+            <dd><strong>Garis Miring (Slash)</strong>:
+              <ul>
+                <li>Dalam HTML, digunakan pada tag penutup (misalnya, <code class="inline-code">&lt;/body&gt;</code>) atau pada elemen kosong (self-closing tag) seperti <code class="inline-code">&lt;img src="..." /&gt;</code> (opsional di HTML5 untuk beberapa elemen).</li>
+                <li>Dalam path URL atau direktori file (misalnya, <code class="inline-code">images/logo.png</code>).</li>
+                <li>Dalam JavaScript, digunakan untuk operator pembagian (misalnya, <code class="inline-code">10 / 2</code>) dan untuk mengawali dan mengakhiri Regular Expressions (misalnya, <code class="inline-code">/pattern/g</code>).</li>
+                <li>Dalam CSS dan JavaScript, digunakan dalam komentar multi-baris (<code class="inline-code">/* komentar */</code>) dan komentar satu baris (<code class="inline-code">// komentar</code> di JS, atau bagian dari <code class="inline-code">/* */</code> di CSS).</li>
+              </ul>
+            </dd>
+
+            <dt>' "</dt>
+            <dd><strong>Tanda Kutip Tunggal dan Ganda (Single and Double Quotes)</strong>:
+              <ul>
+                <li>Dalam HTML, digunakan untuk mengapit nilai atribut (misalnya, <code class="inline-code">&lt;a href="halaman.html"&gt;</code>). Konsistensi disarankan.</li>
+                <li>Dalam JavaScript, digunakan untuk mendefinisikan string (misalnya, <code class="inline-code">let nama = "UVOcode";</code> atau <code class="inline-code">let pesan = 'Halo!';</code>).</li>
+                <li>Dalam CSS, digunakan untuk nilai atribut tertentu (misalnya, <code class="inline-code">font-family: 'Arial', sans-serif;</code>) atau dalam <code class="inline-code">content</code> property.</li>
+              </ul>
+            </dd>
+            
+            <dt>\\</dt> <dd><strong>Backslash (Escape Character)</strong>:
+              <ul>
+                <li>Dalam string JavaScript, digunakan untuk "meloloskan" karakter khusus. Misalnya, <code class="inline-code">'Dia berkata, \"Halo!\"'</code> untuk menyertakan kutip ganda di dalam string yang diapit kutip tunggal, atau <code class="inline-code">\n</code> untuk baris baru.</li>
+                <li>Dalam Regular Expressions, digunakan untuk meloloskan karakter meta atau menandakan sekuens khusus.</li>
+              </ul>
+            </dd>
+
+            <dt>|</dt>
+            <dd><strong>Garis Vertikal (Pipe)</strong>:
+              <ul>
+                <li>Dalam JavaScript, digunakan sebagai operator bitwise OR (<code class="inline-code">|</code>) atau logical OR (<code class="inline-code">||</code>).</li>
+                <li>Kadang digunakan dalam konteks template engine atau sebagai pemisah visual dalam teks biasa.</li>
+              </ul>
+            </dd>
+
+            <dt>:</dt>
+            <dd><strong>Titik Dua (Colon)</strong>:
+              <ul>
+                <li>Dalam CSS, memisahkan properti dari nilainya (misalnya, <code class="inline-code">color: blue;</code>).</li>
+                <li>Dalam CSS, digunakan untuk pseudo-class (misalnya, <code class="inline-code">a:hover</code>) dan pseudo-element (misalnya, <code class="inline-code">p::first-line</code>).</li>
+                <li>Dalam JavaScript, digunakan dalam objek literal untuk memisahkan kunci dari nilai (misalnya, <code class="inline-code">let orang = {nama: "Adi", usia: 30};</code>), dalam label statement, dan dalam operator ternary (<code class="inline-code">kondisi ? nilaiJikaBenar : nilaiJikaSalah</code>).</li>
+              </ul>
+            </dd>
+
+            <dt>( )</dt>
+            <dd><strong>Kurung Biasa (Parentheses)</strong>:
+              <ul>
+                <li>Dalam JavaScript dan bahasa lain, digunakan untuk mengelompokkan ekspresi guna mengontrol urutan operasi (misalnya, <code class="inline-code">(2 + 3) * 4</code>).</li>
+                <li>Digunakan untuk mendefinisikan dan memanggil fungsi (misalnya, <code class="inline-code">function sapa() {...}</code> dan <code class="inline-code">sapa();</code>). Parameter fungsi juga diletakkan di dalamnya.</li>
+                <li>Digunakan dalam struktur kontrol seperti <code class="inline-code">if (...)</code>, <code class="inline-code">for (...)</code>, <code class="inline-code">while (...)</code>.</li>
+                <li>Dalam CSS, digunakan untuk nilai fungsi (misalnya, <code class="inline-code">rgb(255, 0, 0)</code>, <code class="inline-code">url('gambar.png')</code>).</li>
+              </ul>
+            </dd>
+            
+            <dt>_</dt>
+            <dd><strong>Garis Bawah (Underscore)</strong>: Sering digunakan dalam nama variabel atau fungsi sebagai pengganti spasi untuk meningkatkan keterbacaan (snake_case), misalnya <code class="inline-code">nama_pengguna</code>. Juga umum digunakan untuk menandakan variabel atau properti "privat" secara konvensi dalam JavaScript.</dd>
+
+            <dt>+ - =</dt>
+            <dd><strong>Simbol Operasi Aritmatika dan Penugasan</strong>:
+              <ul>
+                <li><code class="inline-code">+</code>: Penjumlahan (JS), penggabungan string (JS), adjacent sibling selector (CSS).</li>
+                <li><code class="inline-code">-</code>: Pengurangan (JS).</li>
+                <li><code class="inline-code">=</code>: Operator penugasan (JS, misalnya <code class="inline-code">x = 5;</code>). <code class="inline-code">==</code> (loose equality) dan <code class="inline-code">===</code> (strict equality) untuk perbandingan.</li>
+              </ul>
+            </dd>
+          </dl>
+        </article>
+        
+        <article id="simbol-css-lanjutan">
+          <h2>Simbol Khusus CSS</h2>
+          <dl>
+            <dt>#</dt>
+            <dd><strong>Tanda Pagar (Hash / Pound Sign)</strong>:
+              <ul>
+                <li>Dalam CSS, digunakan untuk ID selector (misalnya, <code class="inline-code">#header</code> akan menargetkan elemen dengan <code class="inline-code">id="header"</code>).</li>
+                <li>Digunakan untuk merepresentasikan warna heksadesimal (misalnya, <code class="inline-code">#FF0000</code> untuk merah).</li>
+                <li>Dalam URL, menandakan fragment identifier (link ke bagian tertentu halaman, misalnya <code class="inline-code">halaman.html#bagian2</code>).</li>
+              </ul>
+            </dd>
+
+            <dt>.</dt>
+            <dd><strong>Titik (Period / Dot)</strong>:
+              <ul>
+                <li>Dalam CSS, digunakan untuk class selector (misalnya, <code class="inline-code">.tombol</code> akan menargetkan elemen dengan <code class="inline-code">class="tombol"</code>).</li>
+                <li>Dalam JavaScript, digunakan untuk mengakses properti atau metode objek (misalnya, <code class="inline-code">document.getElementById</code> atau <code class="inline-code">mobil.warna</code>).</li>
+                <li>Sebagai bagian dari angka desimal (misalnya, <code class="inline-code">3.14</code>).</li>
+              </ul>
+            </dd>
+            
+            <dt>[ ]</dt>
+            <dd><strong>Kurung Siku Kotak (Square Brackets)</strong>:
+              <ul>
+                <li>Dalam CSS, digunakan untuk attribute selector (misalnya, <code class="inline-code">input[type="text"]</code> akan menargetkan elemen input dengan atribut type bernilai "text").</li>
+                <li>Dalam JavaScript, digunakan untuk mengakses elemen array berdasarkan indeksnya (misalnya, <code class="inline-code">angka[0]</code>) atau properti objek menggunakan nama properti sebagai string (misalnya, <code class="inline-code">orang["nama"]</code>).</li>
+                <li>Untuk mendefinisikan array literal (misalnya, <code class="inline-code">let warna = ["merah", "hijau", "biru"];</code>).</li>
+              </ul>
+            </dd>
+
+            <dt>{ }</dt>
+            <dd><strong>Kurung Kurawal (Curly Braces / Brackets)</strong>:
+              <ul>
+                <li>Dalam CSS, digunakan untuk mengapit blok deklarasi yang berisi properti dan nilai (misalnya, <code class="inline-code">p { color: blue; font-size: 16px; }</code>).</li>
+                <li>Dalam JavaScript, digunakan untuk mendefinisikan blok kode (misalnya, dalam fungsi, pernyataan if, loop).</li>
+                <li>Digunakan untuk mendefinisikan objek literal (misalnya, <code class="inline-code">let mobil = {merk: "Toyota", tahun: 2020};</code>).</li>
+                <li>Dalam JavaScript modern (ES6+), digunakan untuk destructuring assignment dan interpolasi string (template literals) <code class="inline-code">`Halo, ${nama}!`</code>.</li>
+              </ul>
+            </dd>
+
+            <dt>;</dt>
+            <dd><strong>Titik Koma (Semicolon)</strong>:
+              <ul>
+                <li>Dalam CSS, digunakan untuk mengakhiri setiap deklarasi properti-nilai (misalnya, <code class="inline-code">color: red; font-size: 14px;</code>).</li>
+                <li>Dalam JavaScript, digunakan untuk mengakhiri pernyataan (statement). Meskipun opsional dalam banyak kasus karena ASI (Automatic Semicolon Insertion), sangat disarankan untuk selalu menggunakannya demi kejelasan dan menghindari bug potensial.</li>
+              </ul>
+            </dd>
+
+            <dt>*</dt>
+            <dd><strong>Bintang (Asterisk)</strong>:
+              <ul>
+                <li>Dalam CSS, digunakan sebagai universal selector, yang menargetkan semua elemen (misalnya, <code class="inline-code">* { margin: 0; padding: 0; }</code>).</li>
+                <li>Dalam JavaScript, digunakan sebagai operator perkalian (misalnya, <code class="inline-code">5 * 3</code>).</li>
+                <li>Dalam JavaScript ES6+, digunakan untuk generator functions (<code class="inline-code">function* namaGenerator() {}</code>) dan sebagai bagian dari sintaks spread/rest.</li>
+                <li>Dalam komentar multi-baris (<code class="inline-code">/* komentar */</code>).</li>
+              </ul>
+            </dd>
+
+            <dt>~</dt>
+            <dd><strong>Tilde</strong>: Dalam CSS, digunakan sebagai general sibling combinator (misalnya, <code class="inline-code">h1 ~ p</code> akan menargetkan semua elemen <code class="inline-code">&lt;p&gt;</code> yang bersaudara (sibling) dan muncul setelah elemen <code class="inline-code">&lt;h1&gt;</code> serta berbagi parent yang sama).</dd>
+
+            <dt>&gt;</dt>
+            <dd><strong>Lebih Dari (Greater Than)</strong>: Selain sebagai operator perbandingan di JavaScript (<code class="inline-code">a > b</code>), dalam CSS digunakan sebagai child combinator (misalnya, <code class="inline-code">ul > li</code> akan menargetkan elemen <code class="inline-code">&lt;li&gt;</code> yang merupakan anak langsung dari elemen <code class="inline-code">&lt;ul&gt;</code>).</dd>
+          </dl>
+        </article>
+
+        <article id="simbol-html-entitas">
+          <h2>Entitas HTML</h2>
+          <p>Entitas HTML digunakan untuk menampilkan karakter yang memiliki makna khusus dalam HTML (seperti <code class="inline-code">&lt;</code> atau <code class="inline-code">&gt;</code>) sebagai teks literal, atau untuk menampilkan karakter yang tidak mudah diketik pada keyboard.</p>
+          <dl>
+            <dt>&amp;</dt>
+            <dd><strong>Ampersand</strong>: Digunakan untuk memulai sebuah entitas HTML. Untuk menampilkan karakter ampersand itu sendiri, gunakan <code class="inline-code">&amp;amp;</code>.</dd>
+            <dt>&amp;lt;</dt>
+            <dd>Menampilkan karakter <code class="inline-code">&lt;</code> (kurang dari).</dd>
+            <dt>&amp;gt;</dt>
+            <dd>Menampilkan karakter <code class="inline-code">&gt;</code> (lebih dari).</dd>
+            <dt>&amp;nbsp;</dt>
+            <dd><strong>Non-Breaking Space</strong>: Spasi yang tidak akan pecah ke baris baru oleh word wrap.</dd>
+            <dt>&amp;copy;</dt>
+            <dd>Menampilkan simbol copyright &copy;.</dd>
+            <dt>&amp;reg;</dt>
+            <dd>Menampilkan simbol registered trademark &reg;.</dd>
+            <dt>&amp;euro;</dt>
+            <dd>Menampilkan simbol mata uang Euro &euro;.</dd>
+            </dl>
+        </article>
+        <p style="margin-top: 30px; padding: 15px; background-color: #eef; border-left: 4px solid var(--secondary-color);"><strong>Semoga penjelasan komprehensif ini membantu Anda memahami dasar-dasar web development dengan HTML, CSS, dan JavaScript! Teruslah berlatih dan bereksplorasi.</strong></p>
+      </section>
+
+    </main>
+  </div>
+
+  <footer class="site-footer">
+    <div>
+      <strong>UVOcode</strong>
+      © 2024 - <span id="currentYear"></span> UVOcode - All rights reserved.
+      <em>Tutorial oleh ADITdeveloper</em>
+    </div>
+  </footer>
+
+  <script>
+    /**
+     * Fungsi untuk Toggle Sidebar pada tampilan mobile.
+     * Mengubah kelas 'active' pada elemen sidebar.
+     */
+    function toggleSidebar() {
+      const sidebar = document.getElementById('sidebarNav');
+      if (sidebar) {
+        sidebar.classList.toggle('active');
+      }
+    }
+
+    /**
+     * Fungsi untuk menutup sidebar (biasanya setelah klik link di sidebar pada mobile).
+     */
+    function closeSidebar() {
+      const sidebar = document.getElementById('sidebarNav');
+      if (window.innerWidth <= 992 && sidebar && sidebar.classList.contains('active')) { // Hanya tutup jika mobile dan aktif
+        sidebar.classList.remove('active');
+      }
+    }
+    
+    /**
+     * Fungsi Pencarian Konten.
+     * Mencari teks di dalam elemen-elemen konten utama dan menandai yang cocok.
+     */
+    let originalContent = {}; // Untuk menyimpan konten asli sebelum di-highlight
+
+    function searchContent() {
+      const input = document.getElementById("searchInput").value.toLowerCase();
+      const contentArea = document.getElementById("mainContent");
+      
+      // Jika input kosong, kembalikan semua konten ke keadaan semula dan hapus highlight
+      if (input === "") {
+        for (const id in originalContent) {
+          const element = document.getElementById(id);
+          if (element) {
+            element.innerHTML = originalContent[id];
+          }
+        }
+        originalContent = {}; // Kosongkan cache konten asli
+        // Hapus semua highlight yang mungkin tersisa dari metode sebelumnya
+        contentArea.querySelectorAll('.highlight').forEach(el => {
+            const parent = el.parentNode;
+            parent.replaceChild(document.createTextNode(el.textContent), el);
+            parent.normalize(); // Gabungkan node teks yang berdekatan
+        });
+        return;
+      }
+
+      // Iterasi hanya pada elemen teks yang relevan (paragraf, list item, heading, dd)
+      const elementsToSearch = contentArea.querySelectorAll("p, li, h1, h2, h3, h4, h5, h6, dt, dd, pre code, code.inline-code");
+
+      elementsToSearch.forEach((el, index) => {
+        const elementId = el.id || `searchable-${index}`; // Beri ID jika tidak ada
+        if (!el.id) el.id = elementId;
+
+        // Simpan konten asli jika belum disimpan
+        if (!originalContent[elementId]) {
+          originalContent[elementId] = el.innerHTML;
+        }
+        
+        // Kembalikan ke konten asli sebelum melakukan pencarian baru
+        el.innerHTML = originalContent[elementId];
+
+        const textContent = el.textContent.toLowerCase();
+        
+        if (textContent.includes(input)) {
+          // Buat RegExp untuk menemukan semua kemunculan teks input (case-insensitive)
+          const regex = new RegExp(`(${input.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
+          // Ganti teks yang cocok dengan versi yang di-highlight
+          // Hindari menghighlight di dalam tag HTML, hanya teks
+          el.innerHTML = el.innerHTML.replace(regex, (match) => `<span class="highlight">${match}</span>`);
+        }
+      });
+    }
+
+    /**
+     * Fungsi untuk memperbarui tahun di footer secara otomatis.
+     */
+    function updateCopyrightYear() {
+      const yearSpan = document.getElementById('currentYear');
+      if (yearSpan) {
+        yearSpan.textContent = new Date().getFullYear();
+      }
+    }
+    
+    // Panggil fungsi update tahun saat halaman dimuat
+    document.addEventListener('DOMContentLoaded', function() {
+      updateCopyrightYear();
+      
+      // Tambahkan event listener ke link sidebar untuk navigasi yang mulus dan penutupan sidebar
+      const sidebarLinks = document.querySelectorAll('#sidebarNav a');
+      sidebarLinks.forEach(link => {
+        link.addEventListener('click', function(event) {
+          // Hapus kelas active dari semua link
+          sidebarLinks.forEach(l => l.classList.remove('active'));
+          // Tambah kelas active ke link yang diklik
+          this.classList.add('active');
+          
+          // Tutup sidebar di mobile
+          closeSidebar();
+
+          // Navigasi smooth scroll jika link adalah anchor
+          const targetId = this.getAttribute('href');
+          if (targetId.startsWith('#')) {
+            // event.preventDefault(); // Hentikan default anchor behavior jika ingin custom scroll
+            const targetElement = document.querySelector(targetId);
+            if (targetElement) {
+              // Opsi untuk smooth scroll, browser modern mendukungnya via CSS scroll-behavior: smooth;
+              // Jika tidak, bisa implementasi JS:
+              // targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+          }
+        });
+      });
+      
+      // Set link aktif berdasarkan hash URL saat halaman dimuat
+      if (window.location.hash) {
+        const activeLink = document.querySelector(`#sidebarNav a[href="${window.location.hash}"]`);
+        if (activeLink) {
+          activeLink.classList.add('active');
+          const targetElement = document.querySelector(window.location.hash);
+            if (targetElement) {
+                // Pastikan elemen terlihat setelah header sticky
+                setTimeout(() => { // Timeout untuk memastikan layout sudah stabil
+                    targetElement.scrollIntoView({ behavior: 'auto', block: 'start' });
+                }, 100);
+            }
+        }
+      } else {
+        // Jika tidak ada hash, aktifkan link pertama di sidebar (misalnya)
+        const firstLink = document.querySelector('#sidebarNav ul li a');
+        if (firstLink) {
+          firstLink.classList.add('active');
+        }
+      }
+
+    });
+
+  </script>
+</body>
+</html>
