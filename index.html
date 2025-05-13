@@ -4,6 +4,10 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>uvoCODE</title>
+
+  <!-- Font Calleo (gunakan alternatif mirip, seperti Calligraffitti dari Google Fonts) -->
+  <link href="https://fonts.googleapis.com/css2?family=Calligraffitti&display=swap" rel="stylesheet">
+
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.34.1/min/vs/loader.min.js"></script>
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3303675784689911" crossorigin="anonymous"></script>
@@ -29,8 +33,9 @@
     }
 
     .logo {
-      font-size: 1.2rem;
-      font-weight: bold;
+      font-size: 1.5rem;
+      font-family: 'Calligraffitti', cursive;
+      font-weight: normal;
     }
 
     .controls {
@@ -50,31 +55,17 @@
 
     .editor-container {
       flex: 1;
-      display: flex;
-      flex-direction: column;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: 1fr;
+      gap: 2px;
       min-height: 0;
     }
 
-    .editor-column {
-      flex-direction: column;
-    }
-
-    .editor-row {
-      flex-direction: row;
-    }
-
-    #code, iframe {
-      flex: 1;
-      height: 100%;
-      min-height: 0;
-      max-height: 100%;
+    #code, #output {
       width: 100%;
-    }
-
-    .editor-row #code,
-    .editor-row iframe {
-      width: 50%;
       height: 100%;
+      min-height: 0;
     }
 
     iframe {
@@ -104,21 +95,16 @@
     }
 
     @media (max-width: 768px) {
-      .editor-row {
-        flex-direction: column;
-      }
-
-      .editor-row #code,
-      .editor-row iframe {
-        width: 100%;
-        height: 50%;
+      .editor-container {
+        grid-template-columns: 1fr;
+        grid-template-rows: 1fr 1fr;
       }
     }
   </style>
 </head>
 <body>
   <header>
-    <div class="logo">uvoCODE</div>
+    <div class="logo">UVOcode - ADITdev</div>
     <div class="controls">
       <button onclick="setLayout('row')" title="Potrait"><i class="fas fa-arrows-alt-v"></i></button>
       <button onclick="setLayout('column')" title="Landscape"><i class="fas fa-arrows-alt-h"></i></button>
@@ -127,7 +113,7 @@
     </div>
   </header>
 
-  <div id="editor-container" class="editor-container editor-column">
+  <div id="editor-container" class="editor-container">
     <div id="code"></div>
     <iframe id="output"></iframe>
   </div>
@@ -166,7 +152,8 @@
         language: 'html',
         theme: 'vs-dark',
         fontSize: 14,
-        automaticLayout: true
+        automaticLayout: true,
+        minimap: { enabled: false } // ✅ Menghilangkan tulisan kecil/minimap di kanan atas
       });
     });
 
@@ -190,8 +177,13 @@
 
     function setLayout(mode) {
       const container = document.getElementById("editor-container");
-      container.classList.remove("editor-row", "editor-column");
-      container.classList.add(mode === 'row' ? 'editor-row' : 'editor-column');
+      if (mode === 'row') {
+        container.style.gridTemplateColumns = '1fr';
+        container.style.gridTemplateRows = '1fr 1fr';
+      } else {
+        container.style.gridTemplateColumns = '1fr 1fr';
+        container.style.gridTemplateRows = '1fr';
+      }
     }
   </script>
 </body>
