@@ -7,10 +7,8 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.34.1/min/vs/loader.min.js"></script>
 
-  <!-- Font untuk Judul -->
   <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@700&display=swap" rel="stylesheet">
 
-  <!-- Google AdSense -->
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3303675784689911"
           crossorigin="anonymous"></script>
 
@@ -30,13 +28,15 @@
       padding: 10px 0;
       position: fixed;
       top: 0;
+      left: 0; /* Ditambahkan untuk memastikan ads-top membentang penuh */
       z-index: 1000;
     }
 
     /* Header di bawah iklan */
     header {
       position: fixed;
-      top: 90px;
+      top: 70px; /* Disesuaikan berdasarkan tinggi ads-top (misal ads-top punya tinggi 50px + padding 10px*2 = 70px) */
+                  /* Anda mungkin perlu menyesuaikan nilai ini tergantung tinggi aktual ads-top Anda */
       left: 0;
       width: 100%;
       z-index: 999;
@@ -47,17 +47,20 @@
       justify-content: space-between;
       flex-wrap: wrap;
       box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+      box-sizing: border-box; /* Memastikan padding tidak menambah total width */
     }
 
     .logo {
       font-size: 1.2rem;
       font-family: 'Rajdhani', sans-serif;
+      margin: 0 10px; /* Memberi sedikit jarak jika header wrap */
     }
 
     .controls {
       display: flex;
       gap: 10px;
-      flex-wrap: wrap;
+      flex-wrap: wrap; /* Memungkinkan tombol wrap di dalam controls div */
+      align-items: center; /* Menjaga tombol tetap terpusat jika wrap */
     }
 
     .controls button {
@@ -68,13 +71,15 @@
       border-radius: 5px;
       cursor: pointer;
       font-size: 14px;
+      flex-shrink: 0; /* Tambahan: Mencegah tombol menyusut dan terpotong */
     }
 
     .editor-container {
       display: flex;
-      flex-direction: column;
-      margin-top: 170px; /* Spasi dari ads + header */
-      height: calc(100vh - 260px);
+      /* margin-top disesuaikan dengan JS untuk mengakomodasi tinggi header dinamis */
+      height: calc(100vh - 70px - 50px); /* 100vh - ads-top - header - footer */
+                                        /* Anda perlu menghitung tinggi footer juga jika fixed */
+      padding-top: 0; /* Dihapus karena margin-top akan diatur oleh JS */
     }
 
     .editor-row, .editor-column {
@@ -92,7 +97,8 @@
 
     #code {
       flex: 1;
-      height: 100%;
+      height: 100%; /* Seharusnya ini cukup jika parentnya punya height */
+      border-right: 1px solid #333; /* Pemisah antara editor dan output */
     }
 
     iframe {
@@ -100,6 +106,16 @@
       border: none;
       background-color: white;
     }
+
+    /* Iklan Bawah - pastikan tidak overlapping */
+    .ads-bottom {
+        width: 100%;
+        text-align: center;
+        background-color: #2a2a2a;
+        padding: 10px 0;
+        /* position: static; tidak perlu jika ini adalah bagian dari scroll normal */
+    }
+
 
     footer {
       background-color: #2b2b2b;
@@ -111,6 +127,8 @@
       align-items: center;
       gap: 10px;
       flex-wrap: wrap;
+      /* Jika footer fixed, tambahkan position: fixed, bottom: 0, left: 0, width: 100%, z-index: 1000 */
+      /* Dan sesuaikan height pada .editor-container */
     }
 
     footer img {
@@ -118,16 +136,39 @@
     }
 
     @media (max-width: 767px) {
+      header {
+        justify-content: center; /* Pusatkan item header di mobile */
+      }
+      .logo {
+        width: 100%; /* Logo mengambil lebar penuh dan pindah ke baris sendiri */
+        text-align: center;
+        margin-bottom: 10px; /* Jarak ke tombol di bawahnya */
+      }
+      .controls {
+        justify-content: center; /* Pusatkan tombol di dalam controls */
+        width: 100%; /* Controls mengambil lebar penuh */
+      }
       .editor-container {
-        flex-direction: column !important;
+        flex-direction: column !important; /* Paksa kolom di mobile */
+      }
+      #code {
+        border-right: none; /* Hilangkan border di mobile jika layoutnya column */
+        border-bottom: 1px solid #333; /* Tambah border di bawah jika layout column */
       }
     }
+    @media (max-width: 480px) {
+        .controls button {
+            font-size: 12px; /* Kecilkan font tombol di layar sangat kecil */
+            padding: 6px 10px;
+        }
+        .logo {
+            font-size: 1rem;
+        }
+    }
   </style>
-</head>
-<body>
+</head><body>
 
-<!-- Iklan Google AdSense Paling Atas -->
-<div class="ads-top">
+<div class="ads-top" id="adsTop">
   <ins class="adsbygoogle"
        style="display:block"
        data-ad-client="ca-pub-3303675784689911"
@@ -139,8 +180,7 @@
   </script>
 </div>
 
-<!-- Bar Header -->
-<header>
+<header id="mainHeader">
   <div class="controls">
     <button onclick="setLayout('row')" title="Potrait"><i class="fas fa-arrows-alt-v"></i></button>
     <button onclick="setLayout('column')" title="Landscape"><i class="fas fa-arrows-alt-h"></i></button>
@@ -153,33 +193,55 @@
   </div>
 </header>
 
-<!-- Editor & Output -->
 <div id="editor-container" class="editor-container editor-column">
   <div id="code"></div>
   <iframe id="output"></iframe>
 </div>
 
-<!-- Iklan Bawah -->
-<div class="ads-top" style="position: static; background: #2a2a2a;">
+<div class="ads-bottom">
   <ins class="adsbygoogle"
        style="display:block"
        data-ad-client="ca-pub-3303675784689911"
-       data-ad-slot="2770167369"
-       data-ad-format="auto"
+       data-ad-slot="2770167369" data-ad-format="auto"
        data-full-width-responsive="true"></ins>
   <script>
     (adsbygoogle = window.adsbygoogle || []).push({});
   </script>
 </div>
 
-<!-- Footer -->
 <footer>
-  <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjUE7LesOTqq1Fh8jzi8BFXz314fWtzjUT0tEQGhQQKA9v7zyg3zpFOd3c34O6NmzKJSXFUntQURIralFe3XtGDxJ6GdJFuUH3Xp0M768_4XvG-AV43tUrbsdVMGxz7lqkbj63r30FeYColmR5yg0FpeO6UqZ4EScg7tPIiBuZC5DsQlPmy2a_MspUurqSC/s16000/ADITdeveloper.png" alt="Logo"/>
+  <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjUE7LesOTqq1Fh8jzi8BFXz314fWtzjUT0tEQGhQQKA9v7zyg3zpFOd3c34O6NmzKJSXFUntQURIralFe3XtGDxJ6GdJFuUH3Xp0M768_4XvG-AV43tUrbsdVMGxz7lqkbj63r30FeYColmR5yg0FpeO6UqZ4EScg7tPIiBuZC5DsQlPmy2a_MspUurqSC/s16000/ADITdeveloper.png" alt="Logo ADITdeveloper"/>
   <span>&copy; 2025 uvoCODE - All rights reserved.</span>ADITdeveloper
 </footer>
 
-<!-- Script Editor -->
 <script>
+  // Adjust editor margin based on header and ads height
+  function adjustLayout() {
+    const adsTop = document.getElementById('adsTop');
+    const header = document.getElementById('mainHeader');
+    const editorContainer = document.getElementById('editor-container');
+    const adsBottom = document.querySelector('.ads-bottom'); // Ambil elemen iklan bawah
+    const footer = document.querySelector('footer'); // Ambil elemen footer
+
+    const adsTopHeight = adsTop ? adsTop.offsetHeight : 0;
+    const headerHeight = header ? header.offsetHeight : 0;
+    const adsBottomHeight = adsBottom ? adsBottom.offsetHeight : 0;
+    const footerHeight = footer ? footer.offsetHeight : 0;
+
+    if (header) {
+        header.style.top = adsTopHeight + 'px';
+    }
+    if (editorContainer) {
+        const totalTopOffset = adsTopHeight + headerHeight;
+        editorContainer.style.marginTop = totalTopOffset + 'px';
+        // Adjust height considering adsTop, header, adsBottom, and footer
+        editorContainer.style.height = `calc(100vh - ${totalTopOffset}px - ${adsBottomHeight}px - ${footerHeight}px)`;
+    }
+  }
+
+  window.addEventListener('load', adjustLayout);
+  window.addEventListener('resize', adjustLayout); // Adjust on resize too
+
   require.config({ paths: { 'vs': 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.34.1/min/vs' }});
   require(["vs/editor/editor.main"], function () {
     window.editor = monaco.editor.create(document.getElementById('code'), {
@@ -187,45 +249,76 @@
 <html>
 <head>
   <title>Page Title</title>
+  <style>
+    body { font-family: sans-serif; background-color: #f0f0f0; color: #333; padding: 20px; }
+    h1 { color: #007bff; }
+  </style>
 </head>
 <body>
   <h1>Hello world</h1>
-  <p>buat web anda - uvo code.</p>
+  <p>Buat web Anda di uvoCODE!</p>
+  <button onclick="alert('Tombol diklik!')">Klik Saya</button>
 </body>
 </html>`,
       language: 'html',
       theme: 'vs-dark',
       fontSize: 14,
-      automaticLayout: true,
+      automaticLayout: true, // Penting untuk responsivitas editor
       minimap: { enabled: false },
       lineNumbersMinChars: 3,
       lineDecorationsWidth: 0,
       renderLineHighlight: 'none',
-      overviewRulerLanes: 0
+      overviewRulerLanes: 0,
+      scrollbar: {
+        verticalScrollbarSize: 10,
+        horizontalScrollbarSize: 10
+      }
     });
+
+    // Panggil adjustLayout setelah editor dibuat untuk memastikan semua ukuran benar
+    adjustLayout();
   });
 
   function runCode() {
-    const code = window.editor.getValue();
-    const iframe = document.getElementById("output");
-    iframe.srcdoc = code;
+    if (window.editor) {
+      const code = window.editor.getValue();
+      const iframe = document.getElementById("output");
+      iframe.srcdoc = code;
+    } else {
+      console.error("Editor belum siap.");
+    }
   }
 
   function downloadCode() {
-    const code = window.editor.getValue();
-    const filename = prompt("Nama file:", "uvoCODE.html");
-    if (filename) {
-      const blob = new Blob([code], { type: "text/html" });
-      const link = document.createElement("a");
-      link.href = URL.createObjectURL(blob);
-      link.download = filename;
-      link.click();
+    if (window.editor) {
+      const code = window.editor.getValue();
+      const filename = prompt("Nama file:", "uvoCODE.html");
+      if (filename) {
+        const blob = new Blob([code], { type: "text/html" });
+        const link = document.createElement("a");
+        link.href = URL.createObjectURL(blob);
+        link.download = filename;
+        document.body.appendChild(link); // Diperlukan untuk Firefox
+        link.click();
+        document.body.removeChild(link); // Bersihkan setelah diklik
+        URL.revokeObjectURL(link.href); // Bebaskan memori
+      }
+    } else {
+      console.error("Editor belum siap.");
     }
   }
 
   function setLayout(mode) {
     const container = document.getElementById("editor-container");
-    container.className = mode === 'row' ? 'editor-container editor-row' : 'editor-container editor-column';
+    if (mode === 'row') {
+      container.classList.remove('editor-column');
+      container.classList.add('editor-row');
+    } else {
+      container.classList.remove('editor-row');
+      container.classList.add('editor-column');
+    }
+    // Panggil adjustLayout karena perubahan layout mungkin mempengaruhi tinggi header
+    adjustLayout();
   }
 </script>
 
