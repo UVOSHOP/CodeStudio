@@ -7,13 +7,14 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.34.1/min/vs/loader.min.js"></script>
 
-  <!-- Font Tagesschrift fallback -->
-  <style>
-    @font-face {
-      font-family: 'Tagesschrift';
-      src: url('https://fonts.cdnfonts.com/s/12030/Tagesschrift.woff') format('woff');
-    }
+  <!-- Tagesschrift Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@700&display=swap" rel="stylesheet">
 
+  <!-- Google AdSense Script -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3303675784689911"
+          crossorigin="anonymous"></script>
+
+  <style>
     body {
       margin: 0;
       font-family: Arial, sans-serif;
@@ -21,9 +22,15 @@
       color: #f0f0f0;
     }
 
+    .ads-container {
+      padding: 10px;
+      background-color: #2a2a2a;
+      text-align: center;
+    }
+
     header {
       background-color: #2b2b2b;
-      padding: 0.7rem 1rem;
+      padding: 1rem;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -32,8 +39,7 @@
 
     .logo {
       font-size: 1.2rem;
-      font-weight: bold;
-      font-family: 'Tagesschrift', sans-serif;
+      font-family: 'Rajdhani', sans-serif;
     }
 
     .controls {
@@ -45,45 +51,41 @@
     .controls button {
       background-color: #444;
       border: none;
-      padding: 8px;
+      padding: 8px 12px;
       color: white;
       border-radius: 5px;
       cursor: pointer;
+      font-size: 14px;
     }
 
     .editor-container {
       display: flex;
+      flex-direction: column;
       height: calc(100vh - 260px);
-      overflow: hidden;
     }
 
-    .resizer {
-      width: 5px;
-      background: #444;
-      cursor: ew-resize;
+    .editor-row, .editor-column {
+      flex: 1;
+      display: flex;
     }
 
-    #editor {
-      width: 50%;
-      min-width: 200px;
-      resize: horizontal;
-      overflow: auto;
+    .editor-column {
+      flex-direction: row;
+    }
+
+    .editor-row {
+      flex-direction: column;
     }
 
     #code {
+      flex: 1;
       height: 100%;
     }
 
-    #output {
+    iframe {
       flex: 1;
       border: none;
       background-color: white;
-    }
-
-    .ads-container {
-      background-color: #2a2a2a;
-      text-align: center;
-      padding: 5px;
     }
 
     footer {
@@ -95,64 +97,40 @@
       justify-content: center;
       align-items: center;
       gap: 10px;
+      flex-wrap: wrap;
     }
 
     footer img {
       height: 20px;
     }
 
-    .left-tools {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .left-tools a {
-      color: white;
-      background: #444;
-      padding: 6px 10px;
-      border-radius: 5px;
-      text-decoration: none;
-      font-size: 0.9rem;
-    }
-
-    @media (max-width: 768px) {
+    @media (max-width: 767px) {
       .editor-container {
-        flex-direction: column;
-      }
-      .resizer {
-        width: 100%;
-        height: 5px;
-        cursor: ns-resize;
-      }
-      #editor {
-        width: 100%;
-        height: 50%;
-        resize: vertical;
+        flex-direction: column !important;
       }
     }
   </style>
 </head>
 <body>
 
-<!-- Iklan atas -->
+<!-- Iklan di atas Header -->
 <div class="ads-container">
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3303675784689911"
-    crossorigin="anonymous"></script>
   <ins class="adsbygoogle"
-    style="display:block"
-    data-ad-client="ca-pub-3303675784689911"
-    data-ad-slot="2770167369"
-    data-ad-format="auto"
-    data-full-width-responsive="true"></ins>
-  <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+       style="display:block"
+       data-ad-client="ca-pub-3303675784689911"
+       data-ad-slot="2770167369"
+       data-ad-format="auto"
+       data-full-width-responsive="true"></ins>
+  <script>
+    (adsbygoogle = window.adsbygoogle || []).push({});
+  </script>
 </div>
 
 <header>
-  <div class="left-tools">
-    <a href="tutorial.html">📘 Tutorial</a>
+  <div class="controls">
     <button onclick="setLayout('row')" title="Potrait"><i class="fas fa-arrows-alt-v"></i></button>
     <button onclick="setLayout('column')" title="Landscape"><i class="fas fa-arrows-alt-h"></i></button>
+    <button onclick="window.location.href='tutorial.html'" title="Tutorial"><i class="fas fa-book"></i> Tutorial</button>
   </div>
   <div class="logo">UVOcode - ADITdev</div>
   <div class="controls">
@@ -161,48 +139,53 @@
   </div>
 </header>
 
-<div id="editor-container" class="editor-container">
-  <div id="editor">
-    <div id="code"></div>
-  </div>
-  <div class="resizer" id="resizer"></div>
+<div id="editor-container" class="editor-container editor-column">
+  <div id="code"></div>
   <iframe id="output"></iframe>
 </div>
 
-<!-- Iklan bawah -->
+<!-- Iklan Bawah -->
 <div class="ads-container">
   <ins class="adsbygoogle"
-    style="display:block"
-    data-ad-client="ca-pub-3303675784689911"
-    data-ad-slot="2770167369"
-    data-ad-format="auto"
-    data-full-width-responsive="true"></ins>
-  <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+       style="display:block"
+       data-ad-client="ca-pub-3303675784689911"
+       data-ad-slot="2770167369"
+       data-ad-format="auto"
+       data-full-width-responsive="true"></ins>
+  <script>
+    (adsbygoogle = window.adsbygoogle || []).push({});
+  </script>
 </div>
 
 <footer>
-  <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjUE7LesOTqq1Fh8jzi8BFXz314fWtzjUT0tEQGhQQKA9v7zyg3zpFOd3c34O6NmzKJSXFUntQURIralFe3XtGDxJ6GdJFuUH3Xp0M768_4XvG-AV43tUrbsdVMGxz7lqkbj63r30FeYColmR5yg0FpeO6UqZ4EScg7tPIiBuZC5DsQlPmy2a_MspUurqSC/s16000/ADITdeveloper.png" alt="Logo" />
+  <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjUE7LesOTqq1Fh8jzi8BFXz314fWtzjUT0tEQGhQQKA9v7zyg3zpFOd3c34O6NmzKJSXFUntQURIralFe3XtGDxJ6GdJFuUH3Xp0M768_4XvG-AV43tUrbsdVMGxz7lqkbj63r30FeYColmR5yg0FpeO6UqZ4EScg7tPIiBuZC5DsQlPmy2a_MspUurqSC/s16000/ADITdeveloper.png" alt="Logo"/>
   <span>&copy; 2025 uvoCODE - All rights reserved.</span>ADITdeveloper
 </footer>
 
 <script>
+  // Load Monaco Editor
   require.config({ paths: { 'vs': 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.34.1/min/vs' }});
   require(["vs/editor/editor.main"], function () {
     window.editor = monaco.editor.create(document.getElementById('code'), {
       value: `<!DOCTYPE html>
 <html>
 <head>
-<title>Page Title</title>
+  <title>Page Title</title>
 </head>
 <body>
-<h1>Hello world</h1>
-<p>buat web anda - uvo code.</p>
+  <h1>Hello world</h1>
+  <p>buat web anda - uvo code.</p>
 </body>
 </html>`,
       language: 'html',
       theme: 'vs-dark',
       fontSize: 14,
-      automaticLayout: true
+      automaticLayout: true,
+      minimap: { enabled: false },
+      lineNumbersMinChars: 3,
+      lineDecorationsWidth: 0,
+      renderLineHighlight: 'none',
+      overviewRulerLanes: 0
     });
   });
 
@@ -226,33 +209,9 @@
 
   function setLayout(mode) {
     const container = document.getElementById("editor-container");
-    if (mode === 'row') {
-      container.style.flexDirection = 'column';
-      document.getElementById("editor").style.height = '50%';
-      document.getElementById("editor").style.width = '100%';
-    } else {
-      container.style.flexDirection = 'row';
-      document.getElementById("editor").style.height = '100%';
-      document.getElementById("editor").style.width = '50%';
-    }
+    container.className = mode === 'row' ? 'editor-container editor-row' : 'editor-container editor-column';
   }
-
-  // Resizable grid
-  const resizer = document.getElementById('resizer');
-  const editorDiv = document.getElementById('editor');
-  const output = document.getElementById('output');
-
-  resizer.addEventListener('mousedown', function (e) {
-    e.preventDefault();
-    document.onmousemove = function (e) {
-      const offsetRight = document.body.offsetWidth - (e.clientX);
-      const editorWidth = e.clientX;
-      editorDiv.style.width = editorWidth + 'px';
-    };
-    document.onmouseup = function () {
-      document.onmousemove = null;
-    };
-  });
 </script>
+
 </body>
 </html>
